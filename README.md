@@ -226,4 +226,4 @@ As a result, no maintenance is required as AWS adds AZs or regions.
 
 Please visit my <a href="https://github.com/JoeTringali/SafeSelect" target="_blank">SafeSelect github repository</a> 
 to get a copy of SafeSelect. A CloudFormation template for deploying SafeSelect 
-and a sample CloudFormation template showing how to use SafeSelect is included. 
+and a sample CloudFormation template showing how to use SafeSelect are included. 
