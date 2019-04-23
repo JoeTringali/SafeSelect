@@ -1,0 +1,226 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  This template creates subnets within a VPC.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Subnets Configuration"
+        Parameters:
+          - NamePrefixTag
+          - VPCId
+      - Label:
+          default: "Safe Select Lambda Configuration"
+        Parameters:
+          - SafeSelectStackName
+    ParameterLabels:
+      NamePrefixTag:
+        default: Name prefix tag
+      VPCId:
+        default: VPC*
+      SafeSelectStackName:
+        default: Safe Select Stack Name
+
+Parameters:
+  NamePrefixTag:
+    Type: String
+    Description: Tag with a key of 'Name' and a value that you specify as a prefix to the subnets' name tags
+  VPCId:
+    Type: AWS::EC2::VPC::Id
+    Description: A Ref structure that contains the ID of the VPC on which you want to create the subnet
+  SafeSelectStackName:
+    Type: String
+    Description: The name of the stack containing the Safe Select Lambda function
+    Default: SafeSelect
+
+Resources:
+  AZ0: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 0
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ1: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 1
+      ListOfObjects:
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ2: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 2
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ3: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 3
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ4: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 4
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ5: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 5
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ6: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: 6
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ7: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: -1
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  AZ8: 
+    Type: Custom::SafeSelect
+    Properties:
+      ServiceToken: 
+        Fn::ImportValue: 
+          Fn::Sub: "${SafeSelectStackName}-SafeSelectFunction-Arn"         
+      Index: -2
+      ListOfObjects: 
+        Fn::GetAZs: !Ref "AWS::Region"
+  Subnet01:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ0
+          - Selected
+      CidrBlock: "10.0.1.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet01" ] ]
+  Subnet02:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ1
+          - Selected
+      CidrBlock: "10.0.2.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet02" ] ]
+  Subnet03:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ2
+          - Selected
+      CidrBlock: "10.0.3.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet03" ] ]
+  Subnet04:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ3
+          - Selected
+      CidrBlock: "10.0.4.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet04" ] ]
+  Subnet05:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ4
+          - Selected
+      CidrBlock: "10.0.5.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet05" ] ]
+  Subnet06:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ5
+          - Selected
+      CidrBlock: "10.0.6.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet06" ] ]
+  Subnet07:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ6
+          - Selected
+      CidrBlock: "10.0.7.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet07" ] ]
+  Subnet08:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ7
+          - Selected
+      CidrBlock: "10.0.8.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet08" ] ]
+  Subnet09:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        !GetAtt
+          - AZ8
+          - Selected
+      CidrBlock: "10.0.9.0/24"
+      VpcId: !Ref VPCId
+      Tags: 
+        - Key: "Name"
+          Value: !Join ["-", [ !Ref NamePrefixTag, "Subnet09" ] ]
