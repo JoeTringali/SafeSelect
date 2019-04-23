@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  This template creates a SafeSelect lambda function.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Safe Select Lambda Configuration"
+        Parameters:
+          - S3Bucket
+          - S3Key
+    ParameterLabels:
+      S3Bucket:
+        default: S3 Bucket
+      S3Key:
+        default: S3 Key
+
+Parameters:
+  S3Bucket:
+    Type: String
+    Description: The name of the S3 bucket that contains the ZIP package
+  S3Key:
+    Type: String
+    Description: The name of the S3 key that contains the ZIP package
+
+Resources:
+  LambdaExecutionRole: 
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement: 
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement: 
+              - Effect: Allow
+                Action: 
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+  SafeSelectFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: !Ref S3Bucket
+        S3Key: !Ref S3Key
+      Handler: index.handler
+      Role: 
+        !GetAtt
+          - LambdaExecutionRole
+          - Arn
+      MemorySize: 128        
+      Runtime: nodejs8.10
+      Timeout: 30
+Outputs:
+  SafeSelectFunction:
+    Value: 
+      !Ref SafeSelectFunction
+    Export:
+      Name: 
+        !Sub "${AWS::StackName}-SafeSelectFunction"
+  SafeSelectFunctionArn:
+    Value:
+      !GetAtt
+        - SafeSelectFunction
+        - Arn
+    Export:
+      Name: 
+        !Sub "${AWS::StackName}-SafeSelectFunction-Arn"
+  
+
